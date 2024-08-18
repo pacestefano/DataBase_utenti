@@ -142,30 +142,47 @@
             <button type="submit">Login</button>
         </form>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
     <script>
-        async function postData(url = '', data = {}) {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            return response.json();
-        }
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            databaseURL: "your-database-url",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
 
         document.getElementById('loginForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const username = document.getElementById('loginUsername').value;
+            const email = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
 
-            const result = await postData('login.php', { username, password });
-            if (result.status === 'success') {
-                localStorage.setItem('loggedInUserId', result.userId);
-                localStorage.setItem('loggedInUsername', username);
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                localStorage.setItem('loggedInUserId', userCredential.user.uid);
+                localStorage.setItem('loggedInUsername', email);
                 window.location.href = 'index.html'; // Redirect alla home page
+            } catch (error) {
+                alert('Errore di login: ' + error.message);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUsername = localStorage.getItem('loggedInUsername');
+            if (loggedInUsername) {
+                document.querySelector('.account-icon img').src = 'account-icon.png';
+                document.querySelector('.account-icon span').textContent = loggedInUsername;
             } else {
-                alert(result.message);
+                document.querySelector('.account-icon img').src = 'account-icon-guest.png';
+                document.querySelector('.account-icon span').textContent = 'Account';
             }
         });
     </script>
