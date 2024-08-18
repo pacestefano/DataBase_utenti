@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
-// Se desideri aggiungere altre librerie di Firebase, importa qui.
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
 // La configurazione della tua app Firebase
 const firebaseConfig = {
@@ -18,32 +17,44 @@ const firebaseConfig = {
 // Inizializza Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
 
 // Funzione per mostrare notifiche all'utente
 function showNotification(message) {
     const notification = document.getElementById('notification');
-    notification.textContent = message;
-    notification.style.display = 'block';
-    setTimeout(() => {
-        notification.style.display = 'none';
-    }, 3000);
+    if (notification) {
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
 }
 
 // Gestione dello stato dell'utente al caricamento della pagina
 document.addEventListener('DOMContentLoaded', () => {
     const loggedInUsername = localStorage.getItem('loggedInUsername');
+    const accountIconImg = document.querySelector('.account-icon img');
+    const accountIconText = document.querySelector('.account-icon span');
+    const authSection = document.getElementById('authSection');
+
     if (loggedInUsername) {
-        document.querySelector('.account-icon img').src = 'account-icon.png';
-        document.querySelector('.account-icon span').textContent = loggedInUsername;
-        
-        // Nascondi la sezione di autenticazione se l'utente è loggato
-        const authSection = document.getElementById('authSection');
+        if (accountIconImg) {
+            accountIconImg.src = 'account-icon.png';
+        }
+        if (accountIconText) {
+            accountIconText.textContent = loggedInUsername;
+        }
         if (authSection) {
             authSection.style.display = 'none';
         }
     } else {
-        document.querySelector('.account-icon img').src = 'account-icon-guest.png';
-        document.querySelector('.account-icon span').textContent = 'Account';
+        if (accountIconImg) {
+            accountIconImg.src = 'account-icon-guest.png';
+        }
+        if (accountIconText) {
+            accountIconText.textContent = 'Account';
+        }
     }
 });
 
@@ -60,10 +71,8 @@ function goAccount() {
 // Funzione per il toggle del menu a burger
 function toggleMenu() {
     const menu = document.getElementById('burgerMenuContent');
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none';
-    } else {
-        menu.style.display = 'block';
+    if (menu) {
+        menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
     }
 }
 
@@ -74,7 +83,7 @@ document.getElementById('registerForm')?.addEventListener('submit', async (event
     const password = document.getElementById('registerPassword').value;
 
     try {
-        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         localStorage.setItem('loggedInUserId', userCredential.user.uid);
         localStorage.setItem('loggedInUsername', email);
         window.location.href = 'index.html'; // Redirect alla home page
@@ -90,7 +99,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (event) =
     const password = document.getElementById('loginPassword').value;
 
     try {
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
         localStorage.setItem('loggedInUserId', userCredential.user.uid);
         localStorage.setItem('loggedInUsername', email);
         window.location.href = 'index.html'; // Redirect alla home page
