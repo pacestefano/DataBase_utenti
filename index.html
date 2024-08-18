@@ -1,37 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-   
-    
-<!-- Firebase App (core SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-
-<!-- Firebase Authentication -->
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
-
-<!-- Firebase Realtime Database -->
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
-
-<script>
-    // Configurazione Firebase
-    const firebaseConfig = {
-        apiKey: "your-api-key",
-        authDomain: "your-auth-domain",
-        databaseURL: "your-database-url",
-        projectId: "your-project-id",
-        storageBucket: "your-storage-bucket",
-        messagingSenderId: "your-messaging-sender-id",
-        appId: "your-app-id"
-    };
-
-    // Inizializza Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const database = firebase.database();
-</script>
-    
-    
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selezione del Livello di Difficoltà e Login</title>
@@ -49,22 +18,20 @@
             padding: 20px;
             box-sizing: border-box;
         }
-        .account-section, .account-icon {
+        .account-icon {
             position: absolute;
             top: 20px;
+            left: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
         }
-        .account-icon {
-            left: 20px;
-        }
-        .account-section img, .account-icon img {
+        .account-icon img {
             width: 30px;
             height: 30px;
         }
-        .account-section span, .account-icon span {
+        .account-icon span {
             font-size: 12px;
             color: #333;
             margin-top: 5px;
@@ -106,9 +73,6 @@
         .burger-menu-content a:hover {
             background: #f0f0f0;
         }
-        .burger-menu-content a:first-child {
-            font-weight: bold;
-        }
         .main-content {
             display: flex;
             flex-direction: column;
@@ -125,13 +89,13 @@
             color: #333;
             text-shadow: 1px 1px 2px #fff;
         }
-        .game-selection, .auth-section {
+        .game-selection {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-        .game-button-container, .auth-container {
+        .game-button-container {
             display: flex;
             align-items: center;
             margin: 10px 0;
@@ -173,16 +137,11 @@
             line-height: 1.2;
             color: black;
         }
-        .level-description {
-            margin-left: 20px;
-            font-size: 16px;
-            color: #333;
-        }
         .auth-section {
             margin-top: 50px;
             text-align: center;
-            width: calc(100% - 40px); /* Allineato ai bordi dei pulsanti sopra */
-            max-width: 600px; /* Allineato ai pulsanti sopra */
+            width: calc(100% - 40px);
+            max-width: 600px;
             background: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 15px;
@@ -190,32 +149,31 @@
         }
         .auth-section h2 {
             font-size: 18px;
-            margin: 10px 0; /* Ridotto margine verticale */
+            margin: 10px 0;
             color: #333;
             text-shadow: 1px 1px 2px #fff;
-            font-weight: normal; /* Rimosso il grassetto */
         }
         .auth-buttons {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
-            gap: 20px; /* Spazio vuoto tra i pulsanti */
+            gap: 20px;
         }
         .auth-buttons button {
             padding: 15px;
             cursor: pointer;
             font-size: 16px;
-            background-color: #d3eecd; /* Cambiato da verde a verde chiaro */
-            color: black; /* Cambiato il colore del font in nero */
+            background-color: #d3eecd;
+            color: black;
             border: none;
             border-radius: 10px;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: calc(50% - 10px); /* Ridotto per farli affiancare con spazio */
+            width: calc(50% - 10px);
         }
         .auth-buttons button:hover {
-            background-color: #c8e6c9; /* Cambiato a una tonalità più chiara di verde chiaro */
+            background-color: #c8e6c9;
             transform: translateY(-5px);
         }
         .notification {
@@ -237,7 +195,6 @@
             .game-button {
                 font-size: 18px;
                 padding: 10px 15px;
-                height: auto;
             }
             .button-text {
                 font-size: 16px;
@@ -245,26 +202,21 @@
             .button-subtext {
                 font-size: 14px;
             }
-            .level-description {
-                font-size: 14px;
-                margin-left: 10px;
-            }
             .auth-section {
-                width: calc(100% - 40px); /* Per allineare sui dispositivi mobili */
+                width: calc(100% - 40px);
             }
             .auth-section h2 {
                 font-size: 16px;
             }
             .auth-buttons {
-                flex-direction: row; /* Mantenere i pulsanti in una riga */
-                flex-wrap: wrap; /* Consentire ai pulsanti di andare alla riga successiva se non c'è spazio */
-                gap: 10px; /* Spazio tra i pulsanti */
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
             }
             .auth-buttons button {
                 font-size: 14px;
                 padding: 10px;
-                width: calc(50% - 10px); /* Mantenere larghezza con gap */
-                margin: 0; /* Rimuovere margini extra */
+                width: calc(50% - 10px);
             }
         }
     </style>
@@ -289,7 +241,7 @@
         <a href="registrazione.html">Registrati</a>
     </div>
     <div class="main-content">
-        <div class="title" style="margin-top: 40px;">Scegli il tuo gioco</div>
+        <div class="title">Scegli il tuo gioco</div>
         <div class="game-selection">
             <div class="game-button-container">
                 <button class="game-button" onclick="location.href='gioco0/index.html'">
@@ -310,7 +262,7 @@
                 </button>
             </div>
         </div>
-        <div class="auth-section">
+        <div class="auth-section" id="authSection">
             <h2>Puoi giocare come ospite, ma se lo preferisci è disponibile anche la registrazione al gioco per memorizzare lo storico delle tue partite</h2>
             <div class="auth-buttons">
                 <button onclick="location.href='registrazione.html'">Registrati al sito</button>
@@ -319,17 +271,23 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
     <script>
-        async function postData(url = '', data = {}) {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            return response.json();
-        }
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            databaseURL: "your-database-url",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
 
         function showNotification(message) {
             const notification = document.getElementById('notification');
@@ -345,6 +303,7 @@
             if (loggedInUsername) {
                 document.querySelector('.account-icon img').src = 'account-icon.png';
                 document.querySelector('.account-icon span').textContent = loggedInUsername;
+                document.getElementById('authSection').style.display = 'none'; // Nascondi la sezione di autenticazione
             } else {
                 document.querySelector('.account-icon img').src = 'account-icon-guest.png';
                 document.querySelector('.account-icon span').textContent = 'Account';
@@ -352,11 +311,11 @@
         });
 
         function goAccount() {
-            const loggedIn = localStorage.getItem('loggedInUsername'); // Verifica se l'utente è loggato
+            const loggedIn = localStorage.getItem('loggedInUsername'); 
             if (loggedIn) {
                 window.location.href = 'storico.html';
             } else {
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         }
 
@@ -368,8 +327,6 @@
                 menu.style.display = 'block';
             }
         }
-
-        document.getElementById('burgerMenu').addEventListener('click', toggleMenu);
     </script>
 </body>
 </html>
