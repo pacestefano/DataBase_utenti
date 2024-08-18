@@ -162,30 +162,36 @@
             <button type="submit">Registrati</button>
         </form>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
     <script>
-        async function postData(url = '', data = {}) {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            return response.json();
-        }
+        // Configurazione Firebase
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            databaseURL: "your-database-url",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Inizializza Firebase
+        firebase.initializeApp(firebaseConfig);
 
         document.getElementById('registerForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerUsername').value;
             const password = document.getElementById('registerPassword').value;
 
-            const result = await postData('register.php', { username, password });
-            if (result.status === 'success') {
-                localStorage.setItem('loggedInUserId', result.userId);
-                localStorage.setItem('loggedInUsername', username);
+            try {
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                localStorage.setItem('loggedInUserId', userCredential.user.uid);
+                localStorage.setItem('loggedInUsername', email);
                 window.location.href = 'index.html'; // Redirect alla home page
-            } else {
-                alert(result.message);
+            } catch (error) {
+                alert('Errore di registrazione: ' + error.message);
             }
         });
 
