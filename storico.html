@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storico Partite</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e0f7fa, #80deea);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .home-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .home-icon img {
+            width: 30px;
+            height: 30px;
+        }
+        .home-icon span {
+            display: block;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #333;
+        }
+        .table-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="home-icon" onclick="goHome()">
+        <img src="home-icon.png" alt="Home">
+        <span>Home</span>
+    </div>
+    <div class="table-container">
+        <h1>Storico delle Partite</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Livello</th>
+                    <th>Mosse</th>
+                    <th>Tempo</th>
+                    <th>Risultato</th>
+                </tr>
+            </thead>
+            <tbody id="storicoTableBody">
+                <!-- I dati delle partite saranno inseriti qui dinamicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const storicoTableBody = document.getElementById('storicoTableBody');
+            const storico = JSON.parse(localStorage.getItem('storicoPartite')) || [];
+
+            storico.forEach(partita => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${partita.data}</td>
+                    <td>${partita.livello}</td>
+                    <td>${partita.mosse}</td>
+                    <td>${partita.tempo}</td>
+                    <td>${partita.risultato}</td>
+                `;
+                storicoTableBody.appendChild(row);
+            });
+        });
+    </script>
+</body>
+</html>

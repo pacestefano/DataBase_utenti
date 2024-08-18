@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selezione del Livello di Difficoltà e Login</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .account-section, .account-icon {
+            position: absolute;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .account-icon {
+            left: 20px;
+        }
+        .account-section img, .account-icon img {
+            width: 30px;
+            height: 30px;
+        }
+        .account-section span, .account-icon span {
+            font-size: 12px;
+            color: #333;
+            margin-top: 5px;
+        }
+        .burger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .burger-menu div {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+        .burger-menu-content {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+        .burger-menu-content a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s;
+        }
+        .burger-menu-content a:hover {
+            background: #f0f0f0;
+        }
+        .burger-menu-content a:first-child {
+            font-weight: bold;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 60px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            text-shadow: 1px 1px 2px #fff;
+        }
+        .game-selection, .auth-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .game-button-container, .auth-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .game-button {
+            padding: 15px 20px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #a8e6a1, #91d18b);
+            color: black;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .game-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .game-button.yellow {
+            background: linear-gradient(135deg, #ffeb3b, #ffd700);
+        }
+        .game-button.red {
+            background: linear-gradient(135deg, #ff8a80, #ff6659);
+        }
+        .button-text {
+            font-size: 18px;
+            line-height: 1.2;
+            color: black;
+        }
+        .button-subtext {
+            font-size: 14px;
+            line-height: 1.2;
+            color: black;
+        }
+        .level-description {
+            margin-left: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .auth-section {
+            margin-top: 50px;
+            text-align: center;
+            width: calc(100% - 40px); /* Allineato ai bordi dei pulsanti sopra */
+            max-width: 600px; /* Allineato ai pulsanti sopra */
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .auth-section h2 {
+            font-size: 18px;
+            margin: 10px 0; /* Ridotto margine verticale */
+            color: #333;
+            text-shadow: 1px 1px 2px #fff;
+            font-weight: normal; /* Rimosso il grassetto */
+        }
+        .auth-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            gap: 20px; /* Spazio vuoto tra i pulsanti */
+        }
+        .auth-buttons button {
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #d3eecd; /* Cambiato da verde a verde chiaro */
+            color: black; /* Cambiato il colore del font in nero */
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: calc(50% - 10px); /* Ridotto per farli affiancare con spazio */
+        }
+        .auth-buttons button:hover {
+            background-color: #c8e6c9; /* Cambiato a una tonalità più chiara di verde chiaro */
+            transform: translateY(-5px);
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            .title {
+                font-size: 24px;
+            }
+            .game-button {
+                font-size: 18px;
+                padding: 10px 15px;
+                height: auto;
+            }
+            .button-text {
+                font-size: 16px;
+            }
+            .button-subtext {
+                font-size: 14px;
+            }
+            .level-description {
+                font-size: 14px;
+                margin-left: 10px;
+            }
+            .auth-section {
+                width: calc(100% - 40px); /* Per allineare sui dispositivi mobili */
+            }
+            .auth-section h2 {
+                font-size: 16px;
+            }
+            .auth-buttons {
+                flex-direction: row; /* Mantenere i pulsanti in una riga */
+                flex-wrap: wrap; /* Consentire ai pulsanti di andare alla riga successiva se non c'è spazio */
+                gap: 10px; /* Spazio tra i pulsanti */
+            }
+            .auth-buttons button {
+                font-size: 14px;
+                padding: 10px;
+                width: calc(50% - 10px); /* Mantenere larghezza con gap */
+                margin: 0; /* Rimuovere margini extra */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    <div class="account-icon" onclick="goAccount()">
+        <img src="account-icon-guest.png" alt="Account">
+        <span>Account</span>
+    </div>
+    <div class="burger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="burger-menu-content" id="burgerMenuContent">
+        <a href="how-to-play.html">Come si gioca</a>
+        <a href="gioco0/index.html">Gioca al livello Principianti</a>
+        <a href="gioco1/index.html">Gioca al Livello Intermedio</a>
+        <a href="giocomultilevel/index.html">Gioca al Livello Avanzato</a>
+        <a href="login.html">Vai al Login</a>
+        <a href="registrazione.html">Registrati</a>
+    </div>
+    <div class="main-content">
+        <div class="title" style="margin-top: 40px;">Scegli il tuo gioco</div>
+        <div class="game-selection">
+            <div class="game-button-container">
+                <button class="game-button" onclick="location.href='gioco0/index.html'">
+                    <span class="button-text">Gioco 0</span>
+                    <span class="button-subtext">Livello Principianti</span>
+                </button>
+            </div>
+            <div class="game-button-container">
+                <button class="game-button yellow" onclick="location.href='gioco1/index.html'">
+                    <span class="button-text">Gioco 1</span>
+                    <span class="button-subtext">Livello Intermedio</span>
+                </button>
+            </div>
+            <div class="game-button-container">
+                <button class="game-button red" onclick="location.href='giocomultilevel/index.html'">
+                    <span class="button-text">Gioco Multilivello</span>
+                    <span class="button-subtext">Livello Avanzato</span>
+                </button>
+            </div>
+        </div>
+        <div class="auth-section">
+            <h2>Puoi giocare come ospite, ma se lo preferisci è disponibile anche la registrazione al gioco per memorizzare lo storico delle tue partite</h2>
+            <div class="auth-buttons">
+                <button onclick="location.href='registrazione.html'">Registrati al sito</button>
+                <button onclick="location.href='login.html'">Effettua il Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function postData(url = '', data = {}) {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            return response.json();
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUsername = localStorage.getItem('loggedInUsername');
+            if (loggedInUsername) {
+                document.querySelector('.account-icon img').src = 'account-icon.png';
+                document.querySelector('.account-icon span').textContent = loggedInUsername;
+            } else {
+                document.querySelector('.account-icon img').src = 'account-icon-guest.png';
+                document.querySelector('.account-icon span').textContent = 'Account';
+            }
+        });
+
+        function goAccount() {
+            const loggedIn = localStorage.getItem('loggedInUsername'); // Verifica se l'utente è loggato
+            if (loggedIn) {
+                window.location.href = 'storico.html';
+            } else {
+                window.location.href = 'auth.html';
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('burgerMenuContent');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+
+        document.getElementById('burgerMenu').addEventListener('click', toggleMenu);
+    </script>
+</body>
+</html>

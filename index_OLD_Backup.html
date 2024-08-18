@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selezione del Livello di Difficoltà e Login</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Colore di sfondo con gradiente */
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* Font moderno */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .account-section {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .account-section img {
+            width: 30px;
+            height: 30px;
+        }
+        .account-section span {
+            font-size: 12px;
+            color: #333;
+        }
+        .burger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .burger-menu div {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+        .burger-menu-content {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+        .burger-menu-content a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s;
+        }
+        .burger-menu-content a:hover {
+            background: #f0f0f0;
+        }
+        .burger-menu-content a:first-child {
+            font-weight: bold;
+        }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 60px; /* Aggiunto spazio per spostare gli elementi in basso */
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            text-shadow: 1px 1px 2px #fff; /* Effetto ombra per il testo */
+        }
+        .game-selection, .auth-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .game-button-container, .auth-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .game-button {
+            padding: 15px 20px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #a8e6a1, #91d18b); /* Gradiente verde per i bottoni */
+            color: black; /* Colore del testo nero */
+            border: none;
+            border-radius: 15px; /* Bordi arrotondati per un look moderno */
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Testo allineato a sinistra */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .game-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+        .game-button.yellow {
+            background: linear-gradient(135deg, #ffeb3b, #ffd700); /* Gradiente giallo per i bottoni */
+        }
+        .game-button.red {
+            background: linear-gradient(135deg, #ff8a80, #ff6659); /* Gradiente rosso per i bottoni */
+        }
+        .button-text {
+            font-size: 18px;
+            line-height: 1.2;
+            color: black; /* Colore del testo nero */
+        }
+        .button-subtext {
+            font-size: 14px;
+            line-height: 1.2;
+            color: black; /* Colore del testo nero */
+        }
+        .level-description {
+            margin-left: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .auth-section {
+            margin-top: 50px; /* Aumentato a 50 pixel la distanza tra l'ultimo pulsante e "Autenticazione" */
+            text-align: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9); /* Sfondo bianco semitrasparente più visibile */
+            padding: 20px;
+            border-radius: 15px; /* Bordi arrotondati */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombra */
+        }
+        .auth-section h2 {
+            font-size: 18px; /* Ridotte le dimensioni del font */
+            margin: 20px 0 10px;
+            color: #333;
+            text-shadow: 1px 1px 2px #fff;
+        }
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .auth-buttons button {
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+        }
+        .auth-buttons button:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            .title {
+                font-size: 24px;
+            }
+            .game-button {
+                font-size: 18px;
+                padding: 10px 15px;
+                height: auto;
+            }
+            .button-text {
+                font-size: 16px;
+            }
+            .button-subtext {
+                font-size: 14px;
+            }
+            .level-description {
+                font-size: 14px;
+                margin-left: 10px;
+            }
+            .auth-section h2 {
+                font-size: 16px;
+            }
+            .auth-buttons button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    <div class="account-section">
+        <img id="accountIcon" src="account-icon-guest.png" alt="Account">
+        <span id="accountText">Account</span>
+    </div>
+    <div class="burger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="burger-menu-content" id="burgerMenuContent">
+        <a href="how-to-play.html">Come si gioca????</a>
+        <a href="gioco0/index.html">Gioca al livello Principianti</a>
+        <a href="gioco1/index.html">Gioca al Livello Intermedio</a>
+        <a href="gioco2/index.html">Gioca al Livello Avanzato</a>
+        <a href="login.html">Vai al Login</a>
+        <a href="registrazione.html">Registrati</a>
+    </div>
+    <div class="main-content">
+        <div class="title" style="margin-top: 40px;">Seleziona il livello di difficoltà</div> <!-- Cambiato il testo della label -->
+        <div class="game-selection">
+            <div class="game-button-container">
+                <button class="game-button" onclick="location.href='gioco0/index.html'">
+                    <span class="button-text">Gioco 0</span>
+                    <span class="button-subtext">Livello Principianti</span>
+                </button>
+            </div>
+            <div class="game-button-container">
+                <button class="game-button yellow" onclick="location.href='gioco1/index.html'">
+                    <span class="button-text">Gioco 1</span>
+                    <span class="button-subtext">Livello Intermedio</span>
+                </button>
+            </div>
+            <div class="game-button-container">
+                <button class="game-button red" onclick="location.href='gioco2/index.html'">
+                    <span class="button-text">Gioco 2</span>
+                    <span class="button-subtext">Livello Avanzato</span>
+                </button>
+            </div>
+        </div>
+        <div class="auth-section">
+            <h2>puoi giocare come ospite, ma se lo preferisci è disponibile anche la registrazione al gioco per memorizzare lo storico delle tue partite</h2>
+            <div class="auth-buttons">
+                <button onclick="location.href='registrazione.html'">Registrati al sito</button>
+                <button onclick="location.href='login.html'">Effettua il Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function postData(url = '', data = {}) {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            return response.json();
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUsername = localStorage.getItem('loggedInUsername');
+            if (loggedInUsername) {
+                document.getElementById('accountText').textContent = loggedInUsername;
+                document.getElementById('accountIcon').src = 'account-icon.png';
+            } else {
+                document.getElementById('accountIcon').src = 'account-icon-guest.png';
+            }
+        });
+
+        function toggleMenu() {
+            const menu = document.getElementById('burgerMenuContent');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Come si gioca</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e0f7fa, #80deea);
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .home-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .home-icon img {
+            width: 30px;
+            height: 30px;
+        }
+        .home-icon span {
+            display: block;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #333;
+        }
+        .instructions {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .grid-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ffffffaa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 60px 20px 60px 20px 60px;
+            grid-template-rows: repeat(3, 60px);
+            gap: 5px;
+            transition: background-color 1s ease;
+        }
+        .cell, .operator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            border: 1px solid #000;
+            font-size: 22px;
+            user-select: none;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .operator {
+            background-color: transparent;
+            border: none;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+        .highlight-dark {
+            background-color: gray;
+        }
+        .highlight-green {
+            background-color: lightgreen;
+        }
+        .finger, .click {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            transform: translate(-50%, -50%);
+        }
+        .finger {
+            background-image: url('finger.png');
+            left: -50px; /* Posizionato inizialmente fuori dalla scacchiera */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .click {
+            background-image: url('click.png');
+            display: none;
+        }
+        .instruction-text {
+            position: absolute;
+            top: 60px; /* Posizionato sotto il dito */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+            background-color: lightgreen;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            display: none;
+        }
+        .move-animation {
+            animation: fingerMove 4s forwards; /* Rallentato a 4 secondi */
+        }
+        @keyframes fingerMove {
+            0% { transform: translate(-50%, -50%) translate(-60px, 0); }
+            50% { transform: translate(-50%, -50%) translate(0, 0); }
+            100% { transform: translate(-50%, -50%) translate(160px, 60px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="home-icon" onclick="goHome()">
+        <img src="home-icon.png" alt="Home">
+        <span>Home</span>
+    </div>
+    <div class="instructions" id="instructions">
+        Obiettivo del gioco è muovere in numeri sulla scacchiera, trascinandoli nella posizione corretta fino a quando le tre operazioni aritmetiche siano tutte corrette.
+    </div>
+    <div class="grid-container">
+        <div class="grid" id="gameBoard">
+            <div class="cell" id="cell1">9</div>
+            <div class="operator">+</div>
+            <div class="cell" id="cell2">3</div>
+            <div class="operator">=</div>
+            <div class="cell" id="cell3">8</div>
+            <div class="cell" id="cell4">7</div>
+            <div class="operator">+</div>
+            <div class="cell" id="cell5">2</div>
+            <div class="operator">=</div>
+            <div class="cell" id="cell6">1</div>
+            <div class="cell" id="cell7">5</div>
+            <div class="operator">+</div>
+            <div class="cell" id="cell8">4</div>
+            <div class="operator">=</div>
+            <div class="cell" id="cell9">5</div>
+        </div>
+        <div class="finger" id="finger"></div>
+        <div class="click" id="click"></div>
+        <div class="instruction-text" id="instructionText"></div>
+    </div>
+    <script>
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function showInstruction(text) {
+            const instructionText = document.getElementById('instructionText');
+            instructionText.textContent = text;
+            instructionText.style.display = 'block';
+            setTimeout(() => {
+                instructionText.style.display = 'none';
+            }, 1000);
+        }
+
+        function showClick() {
+            const click = document.getElementById('click');
+            click.style.display = 'block';
+            setTimeout(() => {
+                click.style.display = 'none';
+            }, 500);
+        }
+
+        function swapNumbers(cell1, cell6) {
+            const temp = cell1.textContent;
+            cell1.textContent = cell6.textContent;
+            cell6.textContent = temp;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const finger = document.getElementById('finger');
+            const click = document.getElementById('click');
+            const cell1 = document.getElementById('cell1');
+            const cell6 = document.getElementById('cell6');
+            const cell4 = document.getElementById('cell4');
+            const cell5 = document.getElementById('cell5');
+
+            // Posizionare il dito e l'immagine di clic sul primo numero
+            setTimeout(() => {
+                finger.style.top = `${cell1.offsetTop + cell1.offsetHeight / 2}px`;
+                finger.style.left = `${cell1.offsetLeft + cell1.offsetWidth / 2}px`;
+                click.style.top = `${cell1.offsetTop + cell1.offsetHeight / 2}px`;
+                click.style.left = `${cell1.offsetLeft + cell1.offsetWidth / 2}px`;
+
+                // Illumina il box di origine
+                cell1.classList.add('highlight');
+
+                setTimeout(() => {
+                    showClick();
+                    showInstruction('Clicca e tieni premuto');
+                    setTimeout(() => {
+                        cell6.classList.add('highlight-dark'); // Evidenziazione grigio scuro
+                        finger.classList.add('move-animation');
+                        setTimeout(() => {
+                            showInstruction('Rilascia il numero');
+                            cell1.classList.remove('highlight');
+                            cell6.classList.remove('highlight-dark');
+                            cell6.classList.add('highlight');
+
+                            // Sposta il numero e scambia i numeri nei rispettivi box
+                            swapNumbers(cell1, cell6);
+                            cell1.classList.add('highlight'); // Mantieni evidenziato il box di origine
+
+                            // Evidenziazione verde per la riga 2
+                            setTimeout(() => {
+                                cell4.classList.add('highlight-green');
+                                cell5.classList.add('highlight-green');
+                                cell6.classList.add('highlight-green');
+                            }, 500); // Ritardo per mostrare l'evidenziazione verde
+                        }, 4000); // Tempo corrispondente alla durata dell'animazione
+                    }, 1000);
+                }, 1000);
+            }, 500); // Ritardo iniziale per posizionare il dito fuori dalla scacchiera
+        });
+    </script>
+</body>
+</html>
