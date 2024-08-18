@@ -1,23 +1,24 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// La configurazione della tua app Firebase
-const firebaseConfig = {
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
     apiKey: "AIzaSyBlLvwA9EV_bTdJ6zmqNFnAcJD0DMmQC14",
     authDomain: "insta-post-1.firebaseapp.com",
     projectId: "insta-post-1",
     storageBucket: "insta-post-1.appspot.com",
     messagingSenderId: "41317315683",
-    appId: "1:41317315683:web:f29a77dbb8031d76e57456",
-    measurementId: "G-Y3T6W6WEND"
-};
+    appId: "1:41317315683:web:40453788ac3e9326e57456",
+    measurementId: "G-XH4JJNB49X"
+  };
 
-// Inizializza Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 
 // Funzione per mostrare notifiche all'utente
 function showNotification(message) {
